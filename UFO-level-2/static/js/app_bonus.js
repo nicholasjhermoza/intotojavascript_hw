@@ -33,22 +33,27 @@ data.forEach(obj => {
 // * Use a date form in your HTML document and write JavaScript 
 //code that will listen for events and search through the `date/time`
 // column to find rows that match user input.
-
-var filter_btn = d3.select("#filter-btn");
-filter_btn.on("click", runEnter);
+input_dict = {}
+var filter_btn = d3.selectAll(".filter");
+filter_btn.on("change", runEnter);
 function runEnter() {
+    var filter_data = data
   // Prevent the page from refreshing
   d3.event.preventDefault();
   // Select the input element and get the raw HTML node
-  var inputElement = d3.select("#datetime");
-
+  var inputElement = d3.select(this).select("input");
+    var input_id = inputElement.attr("id")
   // Get the value property of the input element
   var inputValue = inputElement.property("value");
-
+  input_dict[input_id] = inputValue
   // Print the value to the console
-  console.log(inputValue);
-  var filter_data = data.filter(x => x.datetime === inputValue)
-tbody.html("")
+  console.log(input_dict);
+
+  Object.entries(input_dict).forEach(([key,value]) => {
+  
+    filter_data = filter_data.filter(x => x[key] === value) 
+  });
+    tbody.html("")
   filter_data.forEach(obj => {
     // for each "element" in the object create a row
     var tRow = tbody.append("tr");
